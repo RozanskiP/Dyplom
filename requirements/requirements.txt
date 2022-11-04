@@ -1,0 +1,5 @@
+fastai>=2.0.0
+transformers
+tensorflow
+onnxruntime-gpu
+optimum[onnxruntime]

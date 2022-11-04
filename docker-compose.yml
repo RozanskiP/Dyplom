@@ -1,0 +1,33 @@
+version: "3.5"
+services:
+  mlservice:
+    build: .
+    container_name: mlservice
+    ipc: "host"
+    stdin_open: true
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    volumes:
+      - ./project:/workspace/project
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    networks:
+      - connect_rabbitmq_mlservice
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - connect_rabbitmq_mlservice
+
+networks:
+  connect_rabbitmq_mlservice:
+    driver: bridge

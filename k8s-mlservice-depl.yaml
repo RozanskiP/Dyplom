@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-mlservice-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlservice
+  template:
+    metadata:
+      labels:
+        app: mlservice
+    spec:
+      containers:
+        - name: mlservice
+          stdin: true
+          tty: true
+          image: pawelrozanski/mlservice:v1.0.0
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-mlservice-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: mlservice
+  ports:
+  - name: mlservice
+    protocol: TCP
+    port: 80
+    targetPort: 80

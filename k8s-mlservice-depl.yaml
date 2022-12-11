@@ -16,10 +16,7 @@ spec:
         - name: mlservice
           stdin: true
           tty: true
-          image: pawelrozanski/mlservice:v1.0.0
-          resources:
-            limits:
-              nvidia.com/gpu: 1
+          image: pawelrozanski/mlservice:v1.2.0
       tolerations:
       - effect: NoSchedule
         operator: Exists
